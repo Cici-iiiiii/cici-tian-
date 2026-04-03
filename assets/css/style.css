@@ -309,28 +309,29 @@ body {
     font-weight: 400;
 }
 
-/* Collapsible Image Section */
+/* Collapsible Image Section - 图片按钮 */
 .collapsible-section {
     margin-top: 15px;
 }
 
 .collapsible-toggle {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px 18px;
-    background: var(--arose-pink);
-    border: 1px solid var(--arose-black-20);
+    gap: 8px;
+    padding: 10px 18px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.3s ease;
     font-size: 13px;
-    color: var(--arose-black-80);
+    color: var(--white);
     letter-spacing: 1px;
+    transition: all 0.3s ease;
 }
 
 .collapsible-toggle:hover {
-    background: var(--white);
-    border-color: var(--arose-black-40);
+    background: rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.5);
 }
 
 .collapsible-toggle-text {
@@ -340,55 +341,109 @@ body {
 }
 
 .collapsible-toggle-icon {
-    width: 16px;
-    height: 16px;
+    display: none;
+}
+
+/* 隐藏原来的展开内容 */
+.collapsible-content {
+    display: none !important;
+}
+
+/* 白色背景区域的按钮样式调整 */
+.case-box .collapsible-toggle {
+    background: var(--arose-pink);
+    border-color: var(--arose-black-20);
+    color: var(--arose-black-80);
+}
+
+.case-box .collapsible-toggle:hover {
+    background: var(--white);
+    border-color: var(--arose-black-40);
+}
+
+/* Image Modal - 图片弹窗 */
+.image-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(62, 43, 47, 0.85);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.image-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.image-modal-content {
+    position: relative;
+    max-width: 85vw;
+    max-height: 85vh;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: scale(0.9);
     transition: transform 0.3s ease;
 }
 
-.collapsible-toggle.active .collapsible-toggle-icon {
-    transform: rotate(180deg);
+.image-modal-overlay.active .image-modal-content {
+    transform: scale(1);
 }
 
-.collapsible-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.4s ease;
-    background: var(--white);
-}
-
-.collapsible-content.active {
-    max-height: none;
-    padding: 20px;
-}
-
-.collapsible-content img {
-    width: 100%;
-    max-width: 450px;
+.image-modal-content img {
+    max-width: 100%;
+    max-height: 75vh;
+    width: auto;
     height: auto;
-    max-height: none;
-    display: block;
-    margin: 0 auto;
-    border-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-/* Chat images grid */
-.chat-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.chat-grid img {
-    width: 100%;
-    max-width: none;
-    height: auto;
-    max-height: 500px;
     object-fit: contain;
+    display: block;
     border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.image-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--white);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--arose-black);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.image-modal-close:hover {
+    background: var(--arose-pink);
+    transform: scale(1.1);
+}
+
+/* 多图弹窗布局 */
+.image-modal-multi {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.image-modal-multi img {
+    max-height: 70vh;
+    width: auto;
 }
 
 /* Four Pillars Grid */
@@ -534,125 +589,6 @@ body {
     }
 }
 
-/* Image Modal - 图片弹窗 */
-.image-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(62, 43, 47, 0.85);
-    backdrop-filter: blur(4px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.image-modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.image-modal-content {
-    position: relative;
-    max-width: 85vw;
-    max-height: 85vh;
-    background: var(--white);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
-}
-
-.image-modal-overlay.active .image-modal-content {
-    transform: scale(1);
-}
-
-.image-modal-content img {
-    max-width: 100%;
-    max-height: 75vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    border-radius: 4px;
-}
-
-.image-modal-close {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    width: 32px;
-    height: 32px;
-    background: var(--white);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: var(--arose-black);
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.image-modal-close:hover {
-    background: var(--arose-pink);
-    transform: scale(1.1);
-}
-
-/* 多图弹窗布局 */
-.image-modal-multi {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.image-modal-multi img {
-    max-height: 70vh;
-    width: auto;
-}
-
-/* 修改原来的 collapsible 样式为按钮样式 */
-.image-view-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    color: var(--white);
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    margin-top: 15px;
-}
-
-.image-view-btn:hover {
-    background: rgba(255,255,255,0.25);
-    border-color: rgba(255,255,255,0.5);
-}
-
-.image-view-btn svg {
-    width: 14px;
-    height: 14px;
-}
-
-/* 移除原来的 collapsible 样式 */
-.collapsible-section,
-.collapsible-toggle,
-.collapsible-content {
-    display: none;
-}
-
 /* Responsive */
 @media (max-width: 1024px) {
     .slide {
@@ -666,9 +602,6 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
     .pillars-grid {
-        grid-template-columns: 1fr;
-    }
-    .chat-grid {
         grid-template-columns: 1fr;
     }
     .section-title {
