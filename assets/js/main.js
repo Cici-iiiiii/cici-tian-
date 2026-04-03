@@ -10,6 +10,15 @@ function goToSlide(index) {
 }
 
 document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeImageModal();
+        return;
+    }
+    
+    if (document.querySelector('.image-modal-overlay.active')) {
+        return;
+    }
+    
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault();
         goToSlide(currentSlide + 1);
@@ -35,18 +44,78 @@ const observer = new IntersectionObserver((entries) => {
 
 slides.forEach(slide => observer.observe(slide));
 
-// Image toggle
+let modalOverlay = null;
+
+function openImageModal(images, isMulti = false) {
+    modalOverlay = document.createElement('div');
+    modalOverlay.className = 'image-modal-overlay';
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'image-modal-content';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'image-modal-close';
+    closeBtn.innerHTML = '✕';
+    closeBtn.onclick = closeImageModal;
+    
+    if (isMulti && Array.isArray(images)) {
+        const multiContainer = document.createElement('div');
+        multiContainer.className = 'image-modal-multi';
+        images.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '图片';
+            multiContainer.appendChild(img);
+        });
+        modalContent.appendChild(multiContainer);
+    } else {
+        const img = document.createElement('img');
+        img.src = images;
+        img.alt = '图片';
+        modalContent.appendChild(img);
+    }
+    
+    modalContent.appendChild(closeBtn);
+    modalOverlay.appendChild(modalContent);
+    document.body.appendChild(modalOverlay);
+    
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeImageModal();
+        }
+    });
+    
+    setTimeout(() => {
+        modalOverlay.classList.add('active');
+    }, 10);
+    
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    if (modalOverlay) {
+        modalOverlay.classList.remove('active');
+        setTimeout(() => {
+            if (modalOverlay && modalOverlay.parentNode) {
+                modalOverlay.parentNode.removeChild(modalOverlay);
+            }
+            modalOverlay = null;
+        }, 300);
+    }
+    document.body.style.overflow = '';
+}
+
 function toggleImage(toggle) {
     const content = toggle.nextElementSibling;
-    const isActive = content.classList.contains('active');
+    if (!content) return;
     
-    // Close all others
-    document.querySelectorAll('.collapsible-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.collapsible-toggle').forEach(t => t.classList.remove('active'));
+    const images = content.querySelectorAll('img');
+    if (images.length === 0) return;
     
-    // Toggle current
-    if (!isActive) {
-        content.classList.add('active');
-        toggle.classList.add('active');
+    if (images.length === 1) {
+        openImageModal(images[0].src);
+    } else {
+        const imageSources = Array.from(images).map(img => img.src);
+        openImageModal(imageSources, true);
     }
 }
